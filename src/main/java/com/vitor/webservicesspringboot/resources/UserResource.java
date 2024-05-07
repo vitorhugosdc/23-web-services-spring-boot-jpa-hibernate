@@ -15,6 +15,10 @@ import com.vitor.webservicesspringboot.entities.User;
 public class UserResource {
 
 	@GetMapping
+	/*
+	 * GetMapping é pra dizer que esse método será chamado em uma requisição GET do
+	 * HTTP para /users
+	 */
 	public ResponseEntity<User> findAll() {
 		User u = new User(1L, "Maria", "maria@gmail.com", "12345678", "12345");
 		return ResponseEntity.ok().body(u);
