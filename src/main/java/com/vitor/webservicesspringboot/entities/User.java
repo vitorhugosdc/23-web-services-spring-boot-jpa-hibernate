@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -63,6 +65,49 @@ public class User implements Serializable {
 	private String phone;
 	private String password;
 
+	/*
+	 * @JsonIgnore na associação de pedidos do cliente, para não haver loopings:
+	 * Cuidado, uma associação de mão dupla, como por exemplo Usuário e Pedido, onde
+	 * um usuário tem pedidos e pedidos tem usuários pode gerar um looping infinito
+	 * na requição HTTP, pois retorna o Json do usuário, ai os pedidos deles, ai os
+	 * pedidos tem usuários, e os usuários pedidos, etc. Pra evitar isso,
+	 * coloca @JsonIgnore em pelo menos uma das classes associadas, como por
+	 * exemplo, em cima da lista de pedidos do cliente:
+	 * 
+	 * Por padrão, quando se tem uma associação MUITOS-PARA-UM, se eu carregar um
+	 * objeto do lado do MUITOS (um objeto pedido/Order), o objeto do lado do UM
+	 * (cliente/User) é carregado automaticamente, por exemplo, se eu carregar um
+	 * pedido que é o lado do muitos List<Order> orders = new ArrayList<>(); na
+	 * entidade Client, como um pedido tem UM só cliente, esse cliente é
+	 * automaticamente carregado e alinhado o objeto relacionado cliente no Json.
+	 * 
+	 * AGORA, o inverso por padrão não ocorre, ou seja, se eu carregar um objeto
+	 * Cliente (UM), não vai aparecer os pedidos dele carregados (MUITOS) no Json. É
+	 * o chamado lazy loading, onde o lado para muitos só é carregado se for
+	 * CHAMADO, para evitar estouro de memória e tráfego de rede.
+	 * 
+	 * Quem solicita esse chamado é o Jackson, que é o serializador Json, ele
+	 * solicita para ai sim o JPA carregar
+	 * 
+	 * Se eu colocasse @JsonIgnore em
+	 * 
+	 * @JsonIgnore
+	 * 
+	 * @ManyToOne
+	 * 
+	 * @JoinColumn(name = "client_id") private User client;
+	 * 
+	 * Na classe Pedido (Order), ai sim, o cliente do pedido não seria carregado
+	 * automaticamente do banco de dados
+	 * 
+	 * Agora se eu deixasse o @JsonIgnore nos pedidos e retira-se do cliente na
+	 * lista de pedidos, ao carregar o cliente carregaria os pedidos, e o contrário
+	 * não seria verdade.
+	 * 
+	 * Por fim, por padrão, vamos deixar o @JsonIgnore na classe 1, que tem o para
+	 * muitos, no caso, nessa classe User (1) que tem associação com Order (n)
+	 */
+	@JsonIgnore
 	/* 1 cliente para muitos pedidos */
 	/*
 	 * A associação OneToMany aparentemente é opcional, só é usado caso eu queira
