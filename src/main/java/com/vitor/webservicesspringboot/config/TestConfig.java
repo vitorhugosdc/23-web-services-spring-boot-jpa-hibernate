@@ -16,13 +16,18 @@ import com.vitor.webservicesspringboot.repositories.UserRepository;
 /*Fala pro Spring que é uma classe de configuração*/
 @Configuration
 /*
- * O Spring só vai rodar essa configuração somente quando estiver no perfil de
+ * O Spring vai rodar essa configuração somente quando estiver no perfil de
  * teste
  */
 @Profile("test")
 public class TestConfig implements CommandLineRunner {
 
 	@Autowired
+	/*
+	 * Com o Autowired, o próprio Spring na hora que estiver rodando a aplicação vai
+	 * resolver essa dependência e associar uma instância de userRepository aqui
+	 * dentro
+	 */
 	private UserRepository userRepository;
 
 	@Autowired

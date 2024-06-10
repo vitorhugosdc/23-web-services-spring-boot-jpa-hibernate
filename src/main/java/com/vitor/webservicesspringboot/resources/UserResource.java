@@ -26,19 +26,23 @@ public class UserResource {
 	/*
 	 * GetMapping é pra dizer que esse método será chamado em uma requisição GET do
 	 * HTTP para /users
+	 * 
+	 * ResponseEntity é um tipo específico do spring para retornar respostas para
+	 * requisições web. Ele é um Generics, e o tipo da resposta dele está entre <>,
+	 * no caso abaixo é uma lista de usuários, então List<User>
 	 */
 	@GetMapping
 	public ResponseEntity<List<User>> findAll() {
 		List<User> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
-	
-	/*Isso indica que dentro da requisição vai ser aceito um id na URL*/
+
+	/* Isso indica que dentro da requisição vai ser aceito um id na URL */
 	@GetMapping(value = "/{id}")
-	/*@PathVariable pro Spring identificar que é o id recebido como parâmetro*/
-	public ResponseEntity<User> findById(@PathVariable Long id){
+	/* @PathVariable pro Spring identificar que é o id recebido como parâmetro */
+	public ResponseEntity<User> findById(@PathVariable Long id) {
 		User obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
-	
+
 }

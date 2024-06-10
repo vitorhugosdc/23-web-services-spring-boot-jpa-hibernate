@@ -75,9 +75,9 @@ public class User implements Serializable {
 	 * exemplo, em cima da lista de pedidos do cliente:
 	 * 
 	 * Por padrão, quando se tem uma associação MUITOS-PARA-UM, se eu carregar um
-	 * objeto do lado do MUITOS (um objeto pedido/Order), o objeto do lado do UM
-	 * (cliente/User) é carregado automaticamente, por exemplo, se eu carregar um
-	 * pedido que é o lado do muitos List<Order> orders = new ArrayList<>(); na
+	 * objeto do lado do MUITOS (N) (um objeto pedido/Order), o objeto do lado do UM
+	 * (1) (cliente/User) é carregado automaticamente, por exemplo, se eu carregar
+	 * um pedido que é o lado do muitos List<Order> orders = new ArrayList<>(); na
 	 * entidade Client, como um pedido tem UM só cliente, esse cliente é
 	 * automaticamente carregado e alinhado o objeto relacionado cliente no Json.
 	 * 
@@ -105,7 +105,10 @@ public class User implements Serializable {
 	 * não seria verdade.
 	 * 
 	 * Por fim, por padrão, vamos deixar o @JsonIgnore na classe 1, que tem o para
-	 * muitos, no caso, nessa classe User (1) que tem associação com Order (n)
+	 * muitos, no caso, nessa classe User (1) que tem associação com Order (n), ou
+	 * seja, se eu carregar um usuário, não vai ser carregado automaticamente todos
+	 * seus pedidos, que podem ser MUITOS. Não precisa por na Order, pois ela tem 1
+	 * só cliente, então carregar esse cliente não pode gerar looping.
 	 */
 	@JsonIgnore
 	/* 1 cliente para muitos pedidos */
@@ -115,7 +118,7 @@ public class User implements Serializable {
 	 * por esse usuário
 	 */
 	/*
-	 * mappedBy = "client" é o o EXATO nome do atributo lá na classe Order que
+	 * mappedBy = "client" é o o EXATO nome do ATRIBUTO lá na classe Order que
 	 * refere-se ao usuário (cliente), ou seja: Esse muito-para-um, lá do outro lado
 	 * (Order) ele está mapeado por (mappedBy) "client" (atributo client da classe
 	 * order)

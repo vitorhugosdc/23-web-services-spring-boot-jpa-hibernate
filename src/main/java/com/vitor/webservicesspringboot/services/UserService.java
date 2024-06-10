@@ -11,7 +11,8 @@ import com.vitor.webservicesspringboot.repositories.UserRepository;
 
 /*Quando um componente vai poder ser injetado, ele precisa ser ser registrado, 
  * no caso como o UserService é um Service, registra como @Service 
- * (tem a @Component que é mais genérica, mas usa as especificas)*/
+ * (tem a @Component que é mais genérica, mas usa as especificas)
+ * A exceção é os repository, o motivo é explicado no User e Order repository*/
 @Service
 public class UserService {
 
