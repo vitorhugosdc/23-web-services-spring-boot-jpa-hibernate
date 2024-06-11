@@ -3,6 +3,7 @@ package com.vitor.webservicesspringboot.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vitor.webservicesspringboot.entities.pk.OrderItemPK;
 
 import jakarta.persistence.EmbeddedId;
@@ -21,7 +22,11 @@ public class OrderItem implements Serializable {
 	 * annotation @Embeddable)
 	 */
 	@EmbeddedId
-	private OrderItemPK id;
+	/*
+	 * Sempre que utilizar uma classe auxiliar como Id composto, tem que instânciar
+	 * ela, se não ela vai valer nullo e pode dar erro
+	 */
+	private OrderItemPK id = new OrderItemPK();
 	private Integer quantity;
 	/*
 	 * Por que repetir o price no Product e na OrderItem? Para manter histórico,
@@ -50,6 +55,12 @@ public class OrderItem implements Serializable {
 	 * esse OrderItem, para não retornar o objeto composto OrderItemPK, retornaremos
 	 * cada um deles certinho
 	 */
+	/*
+	 * Na plataforma Java Enterprise, o que vale é o método get, então a gente
+	 * coloca o @JsonIgnore aqui no get do Order, para não dar looping do pedido
+	 * chamar OrderItem e eles chamarem o Order de novo e assim por diante
+	 */
+	@JsonIgnore
 	public Order getOrder() {
 		return id.getOrder();
 	}
