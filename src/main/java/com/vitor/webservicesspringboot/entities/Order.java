@@ -46,7 +46,10 @@ public class Order implements Serializable {
 
 	/* Muitos pedidos par 1 cliente */
 	@ManyToOne
-	/* client_id vai ser o nome da chave estrangeira na tabela Order */
+	/*
+	 * client_id vai ser o nome da chave estrangeira na tabela Order que armazena o
+	 * id do Usuário que esta associado a esse pedido
+	 */
 	@JoinColumn(name = "client_id")
 	private User client;
 

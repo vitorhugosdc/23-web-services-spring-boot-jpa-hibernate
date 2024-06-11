@@ -9,8 +9,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_product")
@@ -33,7 +35,33 @@ public class Product implements Serializable {
 	 * de uma vez. Também já instanciamos com o new para garantir que o Set comece
 	 * vazio e não nullo.
 	 */
-	@Transient
+	/*
+	 * Quando temos associação MUITOS-PARA-MUITOS (N..N), colocamos a
+	 * annotation @ManyToMany e, em ALGUMA DAS entidades que possuem o MUITOS (N)
+	 * colocamos a anotação abaixo dele, o @JoinTable, o que ele faz?.
+	 * 
+	 * @JoinTable cria uma tabela extra, a chamada tabela de associações, que é como
+	 * solucionamos em banco de dados problemas de muitos-para-muitos (N..N),
+	 * portanto, é criado uma tabela a mais que armazena somente as chaves
+	 * product_id e category_id.
+	 * 
+	 * @JoinTable(name = "tb_product_category",... define o nome dessa tabela extra
+	 * como "tb_product_category".
+	 * 
+	 * joinColumns = @JoinColumn(name = "product_id")... define o nome da chave
+	 * estrangeira referente a tabela de produtos (produtos vem primeiro pois
+	 * estamos fazendo isso na classe Product, não Category) lá na tabela de
+	 * associação.
+	 * 
+	 * inverseJoinColumns = @JoinColumn(name = "category_id") define o nome da chave
+	 * estrangeira da outra entidade lá na tabela de associação. Como estou na
+	 * entidade Product, a "outra entidade" é a Category.
+	 * 
+	 * A tabela de associação armazena as chaves estrangeiras das duas tabelas
+	 * associadas, Product e Category
+	 */
+	@ManyToMany
+	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Category> categories = new HashSet<>();
 
 	public Product() {

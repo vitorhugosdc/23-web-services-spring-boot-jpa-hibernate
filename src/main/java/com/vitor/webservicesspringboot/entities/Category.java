@@ -5,12 +5,15 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_category")
@@ -23,8 +26,26 @@ public class Category implements Serializable {
 	private Long id;
 	private String name;
 
-	/*Uma mesma categoria não pode ter mais de uma vez um mesmo produto*/
-	@Transient
+	/* Uma mesma categoria não pode ter mais de uma vez um mesmo produto */
+	/*
+	 * Aqui é similar ao @OneToMany da classe User, em mappedBy = "categories" -
+	 * "categories" é o nome EXATO da coleção lá na outra classe, ou seja, a classe
+	 * Product cujo nome da coleção de categorias é categories.
+	 * 
+	 * Lembrando que toda a associação de muitos-para-muitos e da tabela de
+	 * associação foi feita na classe Product, simplesmente por preferência, poderia
+	 * ser aqui ao invés de lá, assim, lá teria esse mappedBy.
+	 * 
+	 * Lembrando também de não esquecer do @JsonIgnore, pois como é uma associação
+	 * bi-direcional, novamente se eu não colocar nada, ao chamar os produtos ou
+	 * categories vai entrar em looping infinito, portanto, coloca em uma das
+	 * entidades essa anotação. No caso, foi colocado aqui em Category. Ao colocar
+	 * em Category, ao chamar os produtos vai aparecer também as categories dele,
+	 * mas ao chamar as categorias, não irá aparecer os produtos que ela tem, pois
+	 * o @JsonIgnore está aqui
+	 */
+	@JsonIgnore
+	@ManyToMany(mappedBy = "categories")
 	private Set<Product> products = new HashSet<>();
 
 	public Category() {
