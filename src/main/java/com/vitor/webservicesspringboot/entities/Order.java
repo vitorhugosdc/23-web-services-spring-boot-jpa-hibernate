@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.vitor.webservicesspringboot.entities.enums.OrderStatus;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,11 +31,18 @@ public class Order implements Serializable {
 
 	/*
 	 * Garantir que lá no Json, o instante do pedido seja mostrado no formato de
-	 * String do ISO 8601 
-	 * Instant.parse("2019-06-20T19:53:07Z")
+	 * String do ISO 8601 Instant.parse("2019-06-20T19:53:07Z")
 	 */
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
+
+	/*
+	 * Ao invés de ser 'private OrderStatus orderStatus', internamente na classe
+	 * Order iremos deixar EXPLÍCITO que estamos gravando no banco de dados um
+	 * número inteiro, porém, esse tratamento de número inteiro é só internamente na
+	 * classe Order. Para o mundo externo, ainda estarei mantendo o OrderStatus
+	 */
+	private Integer orderStatus;
 
 	/* Muitos pedidos par 1 cliente */
 	@ManyToOne
@@ -45,9 +53,14 @@ public class Order implements Serializable {
 	public Order() {
 	}
 
-	public Order(Long id, Instant moment, User client) {
+	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
 		this.id = id;
 		this.moment = moment;
+		/*
+		 * Utilizando o setOrderStatus para converter o orderStatus para seu respectivo
+		 * Integer
+		 */
+		setOrderStatus(orderStatus);
 		this.client = client;
 	}
 
@@ -65,6 +78,24 @@ public class Order implements Serializable {
 
 	public void setMoment(Instant moment) {
 		this.moment = moment;
+	}
+
+	public OrderStatus getOrderStatus() {
+		/*
+		 * Aqui está sendo utilizado o método que criamos para converter o inteiro
+		 * interno aqui da classe para OrderStatus
+		 */
+		return OrderStatus.valueOf(orderStatus);
+	}
+
+	public void setOrderStatus(OrderStatus orderStatus) {
+		/*
+		 * Fazendo o inverso do getOrder, aqui estamos convertendo um OrderStatus para
+		 * um inteiro utilizando a função getCode que implementamos
+		 */
+		if (orderStatus != null) {
+			this.orderStatus = orderStatus.getCode();
+		}
 	}
 
 	public User getClient() {
