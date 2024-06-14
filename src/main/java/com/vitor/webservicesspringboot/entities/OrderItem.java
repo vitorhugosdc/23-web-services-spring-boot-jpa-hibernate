@@ -72,6 +72,11 @@ public class OrderItem implements Serializable {
 		id.setOrder(order);
 	}
 
+	/*
+	 * Eu não quero que ao buscar um produto apareça os pedidos dele, eu quero
+	 * buscar um pedido e quero que apareça os itens do pedido e, para cada item de
+	 * pedido, o produto. Portanto o @JsonIgnore vai na classe Product dessa vez
+	 */
 	public Product getProduct() {
 		return id.getProduct();
 	}
