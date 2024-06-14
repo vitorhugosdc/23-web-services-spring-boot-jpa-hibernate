@@ -122,6 +122,10 @@ public class User implements Serializable {
 	 * refere-se ao usuário (cliente), ou seja: Esse muito-para-um, lá do outro lado
 	 * (Order) ele está mapeado por (mappedBy) "client" (atributo client da classe
 	 * order)
+	 * 
+	 * A gente coloca o @JoinColumn no lado "One/Um", ou seja, no Order, porque o
+	 * pedido "One" tem só 1 usuário, então salva o id do usuário lá na tabela de
+	 * pedidos (Order)
 	 */
 	@OneToMany(mappedBy = "client")
 	List<Order> orders = new ArrayList<>();

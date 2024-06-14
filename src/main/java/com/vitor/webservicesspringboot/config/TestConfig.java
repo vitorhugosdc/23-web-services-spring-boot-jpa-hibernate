@@ -29,12 +29,12 @@ import com.vitor.webservicesspringboot.repositories.UserRepository;
 @Profile("test")
 public class TestConfig implements CommandLineRunner {
 
-	@Autowired
 	/*
 	 * Com o Autowired, o próprio Spring na hora que estiver rodando a aplicação vai
 	 * resolver essa dependência e associar uma instância de userRepository aqui
 	 * dentro
 	 */
+	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired

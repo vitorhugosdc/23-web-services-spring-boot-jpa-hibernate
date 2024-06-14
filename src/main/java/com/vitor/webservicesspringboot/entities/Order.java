@@ -57,8 +57,19 @@ public class Order implements Serializable {
 	private User client;
 
 	/*
+	 * Um pedido para vários itens de pedido
+	 * 
 	 * Por que id.order? Porque no OrderItem eu tenho o id, e esse id por sua vez é
-	 * quem tem o pedido
+	 * quem possui uma referência ao pedido e o possui. Ou seja, o order que possui
+	 * o mapeamento tá lá na OrderItemPK. O OrderItemPK é um atributo do OrderItem,
+	 * então acessamos id.order.
+	 * 
+	 * Set pois o pedido não pode ter items de pedido repetidos (o item de pedido
+	 * possui sua quantidade, então se for mais de 1, por exemplo, isso é
+	 * transmitido pela quantidade dele, não por adicionar mais um igual na lista de
+	 * items do pedido, então, se tem mais de um item de pedido igual, ele é
+	 * refletido no atributo quantity da classe OrderItem e, não repetição dele nos
+	 * itens de pedido.
 	 */
 	@OneToMany(mappedBy = "id.order")
 	private Set<OrderItem> items = new HashSet<>();

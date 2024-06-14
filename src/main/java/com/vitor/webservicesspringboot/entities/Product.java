@@ -30,10 +30,10 @@ public class Product implements Serializable {
 
 	/*
 	 * Por que do Set ao invés de List? Como o Set representa um conjunto, eu não
-	 * vou poder ter o mesmo produto com mais de uma categoria, o Set por padrão já
-	 * impede repetições, então um mesmo produto não pode ter a mesma categoria mais
-	 * de uma vez. Também já instanciamos com o new para garantir que o Set comece
-	 * vazio e não nullo.
+	 * vou poder ter o mesmo produto com mais de uma categoria IGUAL, o Set por
+	 * padrão já impede repetições, então um mesmo produto não pode ter a mesma
+	 * categoria mais de uma vez. Também já instanciamos com o new para garantir que
+	 * o Set comece vazio e não nullo.
 	 */
 	/*
 	 * Quando temos associação MUITOS-PARA-MUITOS (N..N), colocamos a
@@ -59,6 +59,16 @@ public class Product implements Serializable {
 	 * 
 	 * A tabela de associação armazena as chaves estrangeiras das duas tabelas
 	 * associadas, Product e Category
+	 */
+	/*
+	 * A entidade que define a @JoinTable é aquela que tem o controle sobre a
+	 * definição das colunas da tabela de junção, ou seja, ela é a "dona" da relação
+	 * 
+	 * A manipulação dos dados é feita do ponto de vista da entidade que define a
+	 * relação. Por exemplo, se a @JoinTable estiver na entidade Product, a gente
+	 * normalmente vai adicionar ou remover categorias a partir de um produto. Se
+	 * estiver na entidade Category, você adicionaria ou removeria produtos a partir
+	 * de uma categoria.
 	 */
 	@ManyToMany
 	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))

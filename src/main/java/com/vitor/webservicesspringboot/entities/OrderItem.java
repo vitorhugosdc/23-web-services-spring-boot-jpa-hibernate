@@ -58,13 +58,16 @@ public class OrderItem implements Serializable {
 	/*
 	 * Na plataforma Java Enterprise, o que vale é o método get, então a gente
 	 * coloca o @JsonIgnore aqui no get do Order, para não dar looping do pedido
-	 * chamar OrderItem e eles chamarem o Order de novo e assim por diante
+	 * chamar OrderItem e eles chamarem o Order de novo e assim por diante, ou seja,
+	 * se eu puxar um pedido, vai puxar os itens de pedido dele, mas, se eu puxar um
+	 * item de pedido, não vai puxar o pedido que ele está
 	 */
 	@JsonIgnore
 	public Order getOrder() {
 		return id.getOrder();
 	}
 
+	/* Recebe um pedido e atribuí ele lá dentro da chave primária correspondente */
 	public void setOrder(Order order) {
 		id.setOrder(order);
 	}
@@ -73,6 +76,7 @@ public class OrderItem implements Serializable {
 		return id.getProduct();
 	}
 
+	/* Recebe um produto e atribuí ele lá dentro da chave primária correspondente */
 	public void setProduct(Product product) {
 		id.setProduct(product);
 	}

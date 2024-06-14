@@ -29,6 +29,9 @@ public class OrderItemPK implements Serializable {
 	/*
 	 * Um Order pode ter muitos OrderItem e, cada OrderItem está associado a apenas
 	 * um Order
+	 * 
+	 * Um pedido pode ter muitos itens de pedido e, cada item de pedido está
+	 * associado a apenas um pedido
 	 */
 	@ManyToOne
 	/*
@@ -40,6 +43,9 @@ public class OrderItemPK implements Serializable {
 	/*
 	 * Um Product pode estar associado a muitos OrderItem e, cada OrderItem está
 	 * associado a apenas um Product
+	 * 
+	 * Um produto pode estar associado a muitos itens de pedido e, cada item de pedido está
+	 * associado a apenas um produto
 	 */
 	@ManyToOne
 	/*
