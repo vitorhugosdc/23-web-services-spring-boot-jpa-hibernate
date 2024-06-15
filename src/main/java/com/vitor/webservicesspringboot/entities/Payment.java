@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,13 +26,16 @@ public class Payment implements Serializable {
 	private Instant moment;
 
 	/*
-	 * Payment é a classe dependente
+	 * @JsonIgnore pra ao puxar o pedido aparecer o pagamento, mas ao pegar o
+	 * pagamento, não aparecer o pedido Payment é a classe dependente
+	 * 
 	 * 
 	 * A gente coloca o @MapsId na classe dependente (@OneToOne vai nas duas) para
 	 * indicar que o Id do Payment vai ser igual a do Order, no caso pagamento, pois
 	 * um pedido por ter 0 (zero) ou 1 pagamento, então o pedido claramente é a
 	 * classe dependente
 	 */
+	@JsonIgnore
 	@OneToOne
 	@MapsId
 	private Order order;

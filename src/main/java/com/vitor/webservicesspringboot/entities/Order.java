@@ -156,6 +156,18 @@ public class Order implements Serializable {
 		this.payment = payment;
 	}
 
+	public Double getTotal() {
+		Double sum = items.stream().map(x -> x.getSubTotal()).reduce(0.0, (x, y) -> x + y);
+		/*
+		 * double sum = 0.0; 
+		 * for (OrderItem oi : items) { 
+		 * 	sum +=oi.subTotal(); 
+		 * }
+		 * return sum;
+		 */
+		return sum;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

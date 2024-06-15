@@ -102,6 +102,15 @@ public class OrderItem implements Serializable {
 		this.price = price;
 	}
 
+	/*
+	 * Novamente, oq vale na plataforma Java Enterprise é o get, então para aparecer
+	 * no Resultado do Json, precisa colocar get antes de subTotal, ao invés de
+	 * subTotal() coloca getSubTotal
+	 */
+	public Double getSubTotal() {
+		return price * quantity;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
