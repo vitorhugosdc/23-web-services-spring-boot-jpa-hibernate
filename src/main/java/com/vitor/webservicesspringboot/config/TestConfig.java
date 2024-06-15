@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import com.vitor.webservicesspringboot.entities.Category;
 import com.vitor.webservicesspringboot.entities.Order;
 import com.vitor.webservicesspringboot.entities.OrderItem;
+import com.vitor.webservicesspringboot.entities.Payment;
 import com.vitor.webservicesspringboot.entities.Product;
 import com.vitor.webservicesspringboot.entities.User;
 import com.vitor.webservicesspringboot.entities.enums.OrderStatus;
@@ -107,6 +108,19 @@ public class TestConfig implements CommandLineRunner {
 		OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
 
 		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
+
+		Payment pay1 = new Payment(null, Instant.parse("2019-06-20T21:53:07Z"), o1);
+
+		/*
+		 * Aqui temos uma PECULIARIDADE: Para salvar um objeto dependente em uma relação
+		 * 1 para 1, a gente não chama o repository do próprio objeto dependente, a
+		 * gente faz a associação de mão dupla em memória com o set da classe dominante
+		 * e, chama o repository da própria classe dominante, que ele já salva.
+		 * 
+		 * Detalhe: nem repository a gente cria pro payment
+		 */
+		o1.setPayment(pay1);
+		orderRepository.save(o1);
 	}
 
 }
