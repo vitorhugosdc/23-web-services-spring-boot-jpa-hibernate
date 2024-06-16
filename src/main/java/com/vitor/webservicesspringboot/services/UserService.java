@@ -29,8 +29,11 @@ public class UserService {
 	}
 
 	public User insert(User obj) {
-		/*Por padrão o .save do repository já retorna o usuário salvo*/
+		/* Por padrão o .save do repository já retorna o usuário salvo */
 		return repository.save(obj);
 	}
 
+	public void delete(Long id) {
+		repository.deleteById(id);
+	}
 }
