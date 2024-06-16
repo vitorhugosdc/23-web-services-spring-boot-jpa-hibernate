@@ -36,4 +36,27 @@ public class UserService {
 	public void delete(Long id) {
 		repository.deleteById(id);
 	}
+
+	public User update(Long id, User obj) {
+		/*
+		 * o getReferenceById instância um usuário, mas ele NÃO VAI no banco de dados
+		 * ainda, ele vai deixar um objeto monitorado. É melhor que usar o findById,
+		 * pois o findById vai no banco de dados buscar o objeto usuário. O
+		 * getReferenceById ele PREPARA o objeto monitorado para ser mexido e DEPOIS
+		 * realizar uma operação no banco de dados, sendo bem melhor
+		 */
+		User entity = repository.getReferenceById(id);
+		updateData(entity, obj);
+		return repository.save(entity);
+	}
+
+	private void updateData(User entity, User obj) {
+		/*
+		 * Nem todos os dados do usuário serão permitidos serem atualizados, a gente
+		 * aqui não permite atualizar Id e nem senha
+		 */
+		entity.setName(obj.getName());
+		entity.setEmail(obj.getEmail());
+		entity.setPhone(obj.getPhone());
+	}
 }
