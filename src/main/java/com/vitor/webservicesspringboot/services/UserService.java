@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.vitor.webservicesspringboot.entities.User;
 import com.vitor.webservicesspringboot.repositories.UserRepository;
+import com.vitor.webservicesspringboot.services.exceptions.ResourceNotFoundException;
 
 /*Quando um componente vai poder ser injetado, ele precisa ser ser registrado, 
  * no caso como o UserService é um Service, registra como @Service 
@@ -25,7 +26,7 @@ public class UserService {
 
 	public User findById(Long id) {
 		Optional<User> obj = repository.findById(id);
-		return obj.get();
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 
 	public User insert(User obj) {
