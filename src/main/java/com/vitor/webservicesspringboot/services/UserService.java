@@ -12,6 +12,8 @@ import com.vitor.webservicesspringboot.repositories.UserRepository;
 import com.vitor.webservicesspringboot.services.exceptions.DatabaseException;
 import com.vitor.webservicesspringboot.services.exceptions.ResourceNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 /*Quando um componente vai poder ser injetado, ele precisa ser ser registrado, 
  * no caso como o UserService é um Service, registra como @Service 
  * (tem a @Component que é mais genérica, mas usa as especificas)
@@ -62,9 +64,13 @@ public class UserService {
 		 * getReferenceById ele PREPARA o objeto monitorado para ser mexido e DEPOIS
 		 * realizar uma operação no banco de dados, sendo bem melhor
 		 */
-		User entity = repository.getReferenceById(id);
-		updateData(entity, obj);
-		return repository.save(entity);
+		try {
+			User entity = repository.getReferenceById(id);
+			updateData(entity, obj);
+			return repository.save(entity);
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
 	}
 
 	private void updateData(User entity, User obj) {
