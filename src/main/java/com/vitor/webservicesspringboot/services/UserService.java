@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.vitor.webservicesspringboot.entities.User;
 import com.vitor.webservicesspringboot.repositories.UserRepository;
+import com.vitor.webservicesspringboot.services.exceptions.DatabaseException;
 import com.vitor.webservicesspringboot.services.exceptions.ResourceNotFoundException;
 
 /*Quando um componente vai poder ser injetado, ele precisa ser ser registrado, 
@@ -35,7 +37,21 @@ public class UserService {
 	}
 
 	public void delete(Long id) {
-		repository.deleteById(id);
+		if (!repository.existsById(id)) {
+			throw new ResourceNotFoundException(id);
+		}
+		try {
+			repository.deleteById(id);
+			/*
+			 * DataIntegrityViolationException
+			 * 
+			 * A gente captura a exceção de quando tenta deletar um usuário que está sendo
+			 * referenciado em outras tabelas do banco de dados e lança a nossa exceção de
+			 * violação de integridade de dados.
+			 */
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
 	}
 
 	public User update(Long id, User obj) {
